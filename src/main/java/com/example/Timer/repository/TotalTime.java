@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
-@Table(name="total_time")
+@Table(name = "total_time")
 public class TotalTime {
     @Id
     private LocalDate date;
