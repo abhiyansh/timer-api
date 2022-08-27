@@ -30,7 +30,7 @@ public class TimerServiceTest {
     }
 
     @Test
-    void shouldReturnTotalTimeCorrespondingToEachDayBetweenStartAndEndTime() {
+    void shouldReturnAdditionalTimeCorrespondingToEachDateWhenStartAndEndTimeAreGiven() {
         TimerService timerService = new TimerService(totalTimeRepository);
         LocalDateTime startTime = LocalDateTime.of(2022, 8, 27, 17, 9, 38);
         LocalDateTime endTime = LocalDateTime.of(2022, 8, 30, 20, 2, 29);
@@ -48,7 +48,7 @@ public class TimerServiceTest {
     }
 
     @Test
-    void shouldUpdateTotalTimeCorrespondingToEachDate() {
+    void shouldUpdateTotalTimeWhenAdditionalTimeCorrespondingToEachDayIsGiven() {
         TimerService timerService = new TimerService(totalTimeRepository);
         ArrayList<TotalTime> timeCorrespondingToDates = new ArrayList<>(List.of(
                 new TotalTime(LocalDate.of(2022, 8, 27), 24_622L),
