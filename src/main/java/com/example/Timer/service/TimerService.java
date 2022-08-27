@@ -6,10 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.TreeMap;
+import java.util.List;
 
 @Service
 public class TimerService {
@@ -20,19 +19,19 @@ public class TimerService {
         this.totalTimeRepository = totalTimeRepository;
     }
 
-    public TreeMap<LocalDate, Long> timeElapsed(LocalDateTime startTime, LocalDateTime endTime) {
-        TreeMap<LocalDate, Long> timeElapsed = new TreeMap<>();
+    public List<TotalTime> timeElapsed(LocalDateTime startTime, LocalDateTime endTime) {
+        List<TotalTime> timeElapsed = new ArrayList<>();
         long duration;
 
         while (!startTime.toLocalDate().equals(endTime.toLocalDate())) {
             LocalDateTime startNextDay = startTime.plusDays(1).withHour(0).withMinute(0).withSecond(0);
             duration = Duration.between(startTime, startNextDay).getSeconds();
-            timeElapsed.put(startTime.toLocalDate(), duration);
+            timeElapsed.add(new TotalTime(startTime.toLocalDate(), duration));
             startTime = startNextDay;
         }
 
         duration = Duration.between(startTime, endTime).getSeconds();
-        timeElapsed.put(startTime.toLocalDate(), duration);
+        timeElapsed.add(new TotalTime(startTime.toLocalDate(), duration));
 
         return timeElapsed;
     }
