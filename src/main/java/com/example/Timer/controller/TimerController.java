@@ -25,8 +25,9 @@ public class TimerController {
     }
 
     @PostMapping("/timer/{date}")
-    public void addOffset(@PathVariable String date, @RequestBody TimeOffSetRequest timeOffSetRequest) {
-        timerService.addOffset(LocalDate.parse(date), timeOffSetRequest.getTimeOffSet());
+    public ResponseEntity<TotalTime> addOffset(@PathVariable String date, @RequestBody TimeOffSetRequest timeOffSetRequest) {
+        TotalTime totalTime = timerService.addOffset(LocalDate.parse(date), timeOffSetRequest.getTimeOffSet());
+        return ResponseEntity.status(HttpStatus.OK).body(totalTime);
     }
 
     @GetMapping("/timer/{date}")

@@ -52,11 +52,12 @@ public class TimerServiceTest {
         TimerService timerService = new TimerService(totalTimeRepository);
         LocalDate date = LocalDate.of(2022, 8, 27);
         long offsetInMinutes = 5L;
-        TotalTime expectedTotalTime = new TotalTime(LocalDate.of(2022, 8, 27), 434);
+        TotalTime expectedTotalTime = new TotalTime(LocalDate.of(2022, 8, 27), 434L);
 
-        timerService.addOffset(date, offsetInMinutes);
+        TotalTime actualTotalTime = timerService.addOffset(date, offsetInMinutes);
 
         verify(totalTimeRepository).save(expectedTotalTime);
+        assertEquals(expectedTotalTime, actualTotalTime);
     }
 
     @Test

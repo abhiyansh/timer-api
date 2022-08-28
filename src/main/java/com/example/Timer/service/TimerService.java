@@ -42,11 +42,12 @@ public class TimerService {
         this.totalTimeRepository.saveAll(updatedTotalTime);
     }
 
-    public void addOffset(LocalDate date, long offsetInMinutes) {
-        TotalTime timeCorrespondingToDate = this.totalTimeRepository.findById(date)
+    public TotalTime addOffset(LocalDate date, long offsetInMinutes) {
+        TotalTime totalTime = this.totalTimeRepository.findById(date)
                 .orElse(new TotalTime(date, 0L));
-        timeCorrespondingToDate.setTime(timeCorrespondingToDate.getTime() + (offsetInMinutes * 60));
-        this.totalTimeRepository.save(timeCorrespondingToDate);
+        totalTime.setTime(totalTime.getTime() + (offsetInMinutes * 60));
+        this.totalTimeRepository.save(totalTime);
+        return totalTime;
     }
 
     public TotalTime getTotalTime(LocalDate date) {

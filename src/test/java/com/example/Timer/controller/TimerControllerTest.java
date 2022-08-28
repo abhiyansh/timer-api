@@ -37,10 +37,12 @@ public class TimerControllerTest {
         String date = "2022-08-27";
         long timeOffSet = 5L;
         TimeOffSetRequest timeOffSetRequest = new TimeOffSetRequest(timeOffSet);
+        TotalTime expectedTotal = new TotalTime(LocalDate.parse(date), 300L);
+        when(timerService.addOffset(LocalDate.of(2022, 8, 27), timeOffSet)).thenReturn(expectedTotal);
 
-        timerController.addOffset(date, timeOffSetRequest);
+        TotalTime actualTotal = timerController.addOffset(date, timeOffSetRequest).getBody();
 
-        verify(timerService).addOffset(LocalDate.of(2022, 8, 27), timeOffSet);
+        assertEquals(expectedTotal, actualTotal);
     }
 
     @Test
