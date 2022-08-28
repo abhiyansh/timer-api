@@ -1,13 +1,14 @@
 package com.example.Timer.controller;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 
 import java.time.LocalDateTime;
 
 public class TimeIntervalRequest {
-    @JsonProperty
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime startTime;
-    @JsonProperty
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime endTime;
 
     public TimeIntervalRequest(LocalDateTime startTime, LocalDateTime endTime) {
