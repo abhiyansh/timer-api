@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class TimerService {
@@ -19,29 +18,26 @@ public class TimerService {
         this.totalTimeRepository = totalTimeRepository;
     }
 
-    public List<TotalTime> timeElapsed(LocalDateTime startTime, LocalDateTime endTime) {
-        List<TotalTime> timeElapsed = new ArrayList<>();
+    void addInterval(LocalDateTime startTime, LocalDateTime endTime) {
+        ArrayList<TotalTime> timeElapsed = new ArrayList<>();
         long duration;
 
         while (!startTime.toLocalDate().equals(endTime.toLocalDate())) {
             LocalDateTime startNextDay = startTime.plusDays(1).withHour(0).withMinute(0).withSecond(0);
             duration = Duration.between(startTime, startNextDay).getSeconds();
+            duration += this.totalTimeRepository.findById(startTime.toLocalDate())
+                    .orElse(new TotalTime(startTime.toLocalDate(), 0L))
+                    .getTime();
             timeElapsed.add(new TotalTime(startTime.toLocalDate(), duration));
             startTime = startNextDay;
         }
 
         duration = Duration.between(startTime, endTime).getSeconds();
+        duration += this.totalTimeRepository.findById(startTime.toLocalDate())
+                .orElse(new TotalTime(startTime.toLocalDate(), 0L))
+                .getTime();
         timeElapsed.add(new TotalTime(startTime.toLocalDate(), duration));
 
-        return timeElapsed;
-    }
-
-    public void updateTotalTime(ArrayList<TotalTime> timeCorrespondingToDates) {
-        for (TotalTime updatedTime : timeCorrespondingToDates) {
-            TotalTime currentTotal = this.totalTimeRepository.findById(updatedTime.getDate())
-                    .orElse(new TotalTime(updatedTime.getDate(), 0L));
-            updatedTime.setTime(currentTotal.getTime() + updatedTime.getTime());
-        }
-        this.totalTimeRepository.saveAll(timeCorrespondingToDates);
+        this.totalTimeRepository.saveAll(timeElapsed);
     }
 }
