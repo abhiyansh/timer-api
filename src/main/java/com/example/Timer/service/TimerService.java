@@ -19,7 +19,7 @@ public class TimerService {
     }
 
     void addInterval(LocalDateTime startTime, LocalDateTime endTime) {
-        ArrayList<TotalTime> timeElapsed = new ArrayList<>();
+        ArrayList<TotalTime> updatedTotalTime = new ArrayList<>();
         long duration;
 
         while (!startTime.toLocalDate().equals(endTime.toLocalDate())) {
@@ -28,7 +28,7 @@ public class TimerService {
             duration += this.totalTimeRepository.findById(startTime.toLocalDate())
                     .orElse(new TotalTime(startTime.toLocalDate(), 0L))
                     .getTime();
-            timeElapsed.add(new TotalTime(startTime.toLocalDate(), duration));
+            updatedTotalTime.add(new TotalTime(startTime.toLocalDate(), duration));
             startTime = startNextDay;
         }
 
@@ -36,8 +36,8 @@ public class TimerService {
         duration += this.totalTimeRepository.findById(startTime.toLocalDate())
                 .orElse(new TotalTime(startTime.toLocalDate(), 0L))
                 .getTime();
-        timeElapsed.add(new TotalTime(startTime.toLocalDate(), duration));
+        updatedTotalTime.add(new TotalTime(startTime.toLocalDate(), duration));
 
-        this.totalTimeRepository.saveAll(timeElapsed);
+        this.totalTimeRepository.saveAll(updatedTotalTime);
     }
 }
