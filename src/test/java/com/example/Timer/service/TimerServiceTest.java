@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class TimerServiceTest {
@@ -56,5 +57,27 @@ public class TimerServiceTest {
         timerService.addOffset(date, offsetInMinutes);
 
         verify(totalTimeRepository).save(expectedTotalTime);
+    }
+
+    @Test
+    void shouldReturnTotalTimeForADayIfItExists() {
+        TimerService timerService = new TimerService(totalTimeRepository);
+        LocalDate date = LocalDate.of(2022, 8, 27);
+        long expectedTotalTime = 134L;
+
+        long actualTotalTime = timerService.getTotalTime(date);
+
+        assertEquals(expectedTotalTime, actualTotalTime);
+    }
+
+    @Test
+    void shouldReturnTotalTimeForADayAsZeroIfItDoesNotExist() {
+        TimerService timerService = new TimerService(totalTimeRepository);
+        LocalDate date = LocalDate.of(2022, 8, 28);
+        long expectedTotalTime = 0L;
+
+        long actualTotalTime = timerService.getTotalTime(date);
+
+        assertEquals(expectedTotalTime, actualTotalTime);
     }
 }

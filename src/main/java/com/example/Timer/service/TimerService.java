@@ -48,4 +48,10 @@ public class TimerService {
         timeCorrespondingToDate.setTime(timeCorrespondingToDate.getTime() + (offsetInMinutes * 60));
         this.totalTimeRepository.save(timeCorrespondingToDate);
     }
+
+    public long getTotalTime(LocalDate date) {
+        return this.totalTimeRepository.findById(date)
+                .orElse(new TotalTime(date, 0L))
+                .getTime();
+    }
 }
