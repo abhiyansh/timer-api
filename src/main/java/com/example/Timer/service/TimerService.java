@@ -19,7 +19,7 @@ public class TimerService {
         this.totalTimeRepository = totalTimeRepository;
     }
 
-    void addInterval(LocalDateTime startTime, LocalDateTime endTime) {
+    public void addInterval(LocalDateTime startTime, LocalDateTime endTime) {
         ArrayList<TotalTime> updatedTotalTime = new ArrayList<>();
         long duration;
 
