@@ -45,4 +45,16 @@ public class TimerServiceTest {
 
         verify(totalTimeRepository).saveAll(expectedTotalTime);
     }
+
+    @Test
+    void shouldAddTimeOffsetToAGivenDate() {
+        TimerService timerService = new TimerService(totalTimeRepository);
+        LocalDate date = LocalDate.of(2022, 8, 27);
+        long offsetInMinutes = 5L;
+        TotalTime expectedTotalTime = new TotalTime(LocalDate.of(2022, 8, 27), 434);
+
+        timerService.addOffset(date, offsetInMinutes);
+
+        verify(totalTimeRepository).save(expectedTotalTime);
+    }
 }

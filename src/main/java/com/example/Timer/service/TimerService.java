@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -39,5 +40,12 @@ public class TimerService {
         updatedTotalTime.add(new TotalTime(startTime.toLocalDate(), duration));
 
         this.totalTimeRepository.saveAll(updatedTotalTime);
+    }
+
+    public void addOffset(LocalDate date, long offsetInMinutes) {
+        TotalTime timeCorrespondingToDate = this.totalTimeRepository.findById(date)
+                .orElse(new TotalTime(date, 0L));
+        timeCorrespondingToDate.setTime(timeCorrespondingToDate.getTime() + (offsetInMinutes * 60));
+        this.totalTimeRepository.save(timeCorrespondingToDate);
     }
 }
