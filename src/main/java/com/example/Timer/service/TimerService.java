@@ -9,6 +9,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class TimerService {
@@ -19,7 +20,7 @@ public class TimerService {
         this.totalTimeRepository = totalTimeRepository;
     }
 
-    public void addInterval(LocalDateTime startTime, LocalDateTime endTime) {
+    public List<TotalTime> addInterval(LocalDateTime startTime, LocalDateTime endTime) {
         ArrayList<TotalTime> updatedTotalTime = new ArrayList<>();
         long duration;
 
@@ -40,6 +41,7 @@ public class TimerService {
         updatedTotalTime.add(new TotalTime(startTime.toLocalDate(), duration));
 
         this.totalTimeRepository.saveAll(updatedTotalTime);
+        return updatedTotalTime;
     }
 
     public TotalTime addOffset(LocalDate date, long offsetInMinutes) {

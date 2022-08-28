@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 public class TimerController {
@@ -20,8 +21,9 @@ public class TimerController {
     }
 
     @PostMapping("/timer")
-    public void addInterval(@RequestBody TimeIntervalRequest timeIntervalRequest) {
-        timerService.addInterval(timeIntervalRequest.getStartTime(), timeIntervalRequest.getEndTime());
+    public ResponseEntity<List<TotalTime>> addInterval(@RequestBody TimeIntervalRequest timeIntervalRequest) {
+        List<TotalTime> totalTime = timerService.addInterval(timeIntervalRequest.getStartTime(), timeIntervalRequest.getEndTime());
+        return ResponseEntity.status(HttpStatus.OK).body(totalTime);
     }
 
     @PostMapping("/timer/{date}")

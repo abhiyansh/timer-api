@@ -7,9 +7,11 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class TimerControllerTest {
     private TimerService timerService;
@@ -25,10 +27,17 @@ public class TimerControllerTest {
         LocalDateTime startTime = LocalDateTime.of(2022, 8, 27, 17, 9, 38);
         LocalDateTime endTime = LocalDateTime.of(2022, 8, 30, 20, 2, 29);
         TimeIntervalRequest timeIntervalRequest = new TimeIntervalRequest(startTime, endTime);
+        List<TotalTime> expectedUpdatedTotalTime = List.of(
+                new TotalTime(LocalDate.of(2022, 8, 27), 24_756L),
+                new TotalTime(LocalDate.of(2022, 8, 28), 86_400L),
+                new TotalTime(LocalDate.of(2022, 8, 29), 86_400L),
+                new TotalTime(LocalDate.of(2022, 8, 30), 72_149L)
+        );
+        when(timerService.addInterval(startTime, endTime)).thenReturn(expectedUpdatedTotalTime);
 
-        timerController.addInterval(timeIntervalRequest);
+        List<TotalTime> actualUpdatedTotalTime = timerController.addInterval(timeIntervalRequest).getBody();
 
-        verify(timerService).addInterval(startTime, endTime);
+        assertEquals(expectedUpdatedTotalTime, actualUpdatedTotalTime);
     }
 
     @Test

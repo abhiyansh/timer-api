@@ -37,3 +37,6 @@ out/
 .vscode/
 
 .talismanrc
+.DS_Store
+data-1661702060161.csv
+timer

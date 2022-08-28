@@ -42,9 +42,10 @@ public class TimerServiceTest {
                 new TotalTime(LocalDate.of(2022, 8, 30), 72_149L)
         );
 
-        timerService.addInterval(startTime, endTime);
+        List<TotalTime> actualTotalTime = timerService.addInterval(startTime, endTime);
 
         verify(totalTimeRepository).saveAll(expectedTotalTime);
+        assertEquals(expectedTotalTime, actualTotalTime);
     }
 
     @Test
