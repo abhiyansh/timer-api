@@ -1,5 +1,6 @@
 package com.example.Timer.controller;
 
+import com.example.Timer.repository.TotalTime;
 import com.example.Timer.service.TimerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,10 +47,10 @@ public class TimerControllerTest {
     void shouldReturnTotalTimeForAGivenDate() {
         TimerController timerController = new TimerController(timerService);
         String date = "2022-08-27";
-        long expectedTotal = 134L;
+        TotalTime expectedTotal = new TotalTime(LocalDate.parse(date), 134L);
         when(timerService.getTotalTime(LocalDate.of(2022, 8, 27))).thenReturn(expectedTotal);
 
-        Long actualTotal = timerController.getTotal(date).getBody();
+        TotalTime actualTotal = timerController.getTotal(date).getBody();
 
         assertEquals(expectedTotal, actualTotal);
     }

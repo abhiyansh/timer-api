@@ -63,9 +63,9 @@ public class TimerServiceTest {
     void shouldReturnTotalTimeForADayIfItExists() {
         TimerService timerService = new TimerService(totalTimeRepository);
         LocalDate date = LocalDate.of(2022, 8, 27);
-        long expectedTotalTime = 134L;
+        TotalTime expectedTotalTime = new TotalTime(date, 134L);
 
-        long actualTotalTime = timerService.getTotalTime(date);
+        TotalTime actualTotalTime = timerService.getTotalTime(date);
 
         assertEquals(expectedTotalTime, actualTotalTime);
     }
@@ -74,9 +74,9 @@ public class TimerServiceTest {
     void shouldReturnTotalTimeForADayAsZeroIfItDoesNotExist() {
         TimerService timerService = new TimerService(totalTimeRepository);
         LocalDate date = LocalDate.of(2022, 8, 28);
-        long expectedTotalTime = 0L;
+        TotalTime expectedTotalTime = new TotalTime(date, 0L);
 
-        long actualTotalTime = timerService.getTotalTime(date);
+        TotalTime actualTotalTime = timerService.getTotalTime(date);
 
         assertEquals(expectedTotalTime, actualTotalTime);
     }

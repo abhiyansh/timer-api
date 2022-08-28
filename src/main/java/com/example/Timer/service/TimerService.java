@@ -49,9 +49,8 @@ public class TimerService {
         this.totalTimeRepository.save(timeCorrespondingToDate);
     }
 
-    public long getTotalTime(LocalDate date) {
+    public TotalTime getTotalTime(LocalDate date) {
         return this.totalTimeRepository.findById(date)
-                .orElse(new TotalTime(date, 0L))
-                .getTime();
+                .orElse(new TotalTime(date, 0L));
     }
 }

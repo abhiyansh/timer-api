@@ -1,5 +1,6 @@
 package com.example.Timer.controller;
 
+import com.example.Timer.repository.TotalTime;
 import com.example.Timer.service.TimerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,8 +30,8 @@ public class TimerController {
     }
 
     @GetMapping("/timer/{date}")
-    public ResponseEntity<Long> getTotal(@PathVariable String date) {
-        long totalTime = timerService.getTotalTime(LocalDate.parse(date));
+    public ResponseEntity<TotalTime> getTotal(@PathVariable String date) {
+        TotalTime totalTime = timerService.getTotalTime(LocalDate.parse(date));
         return ResponseEntity.status(HttpStatus.OK).body(totalTime);
     }
 }
