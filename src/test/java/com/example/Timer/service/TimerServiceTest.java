@@ -1,5 +1,6 @@
 package com.example.Timer.service;
 
+import com.example.Timer.exceptions.InvalidTimeIntervalException;
 import com.example.Timer.repository.TotalTime;
 import com.example.Timer.repository.TotalTimeRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 public class TimerServiceTest {
@@ -46,6 +48,24 @@ public class TimerServiceTest {
 
         verify(totalTimeRepository).saveAll(expectedTotalTime);
         assertEquals(expectedTotalTime, actualTotalTime);
+    }
+
+    @Test
+    void shouldThrowInvalidTimeIntervalExceptionWhenStartTimeIsEqualToEndTime() {
+        TimerService timerService = new TimerService(totalTimeRepository);
+        LocalDateTime startTime = LocalDateTime.of(2022, 8, 30, 20, 2, 29);
+        LocalDateTime endTime = LocalDateTime.of(2022, 8, 30, 20, 2, 29);
+
+        assertThrows(InvalidTimeIntervalException.class, () -> timerService.addInterval(startTime, endTime));
+    }
+
+    @Test
+    void shouldThrowInvalidTimeIntervalExceptionWhenStartTimeIsAfterEndTime() {
+        TimerService timerService = new TimerService(totalTimeRepository);
+        LocalDateTime startTime = LocalDateTime.of(2022, 8, 30, 21, 2, 29);
+        LocalDateTime endTime = LocalDateTime.of(2022, 8, 30, 20, 2, 29);
+
+        assertThrows(InvalidTimeIntervalException.class, () -> timerService.addInterval(startTime, endTime));
     }
 
     @Test

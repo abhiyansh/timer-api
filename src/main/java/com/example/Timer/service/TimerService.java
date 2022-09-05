@@ -1,5 +1,6 @@
 package com.example.Timer.service;
 
+import com.example.Timer.exceptions.InvalidTimeIntervalException;
 import com.example.Timer.repository.TotalTime;
 import com.example.Timer.repository.TotalTimeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class TimerService {
     }
 
     public List<TotalTime> addInterval(LocalDateTime startTime, LocalDateTime endTime) {
+        if (!startTime.isBefore(endTime))
+            throw new InvalidTimeIntervalException();
+
         ArrayList<TotalTime> updatedTotalTime = new ArrayList<>();
         long duration;
 
