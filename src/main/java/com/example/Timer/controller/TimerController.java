@@ -20,19 +20,19 @@ public class TimerController {
         this.timerService = timerService;
     }
 
-    @PostMapping("/timer")
+    @PostMapping("/time")
     public ResponseEntity<List<TotalTime>> addInterval(@RequestBody TimeIntervalRequest timeIntervalRequest) {
         List<TotalTime> totalTime = timerService.addInterval(timeIntervalRequest.getStartTime(), timeIntervalRequest.getEndTime());
         return ResponseEntity.status(HttpStatus.OK).body(totalTime);
     }
 
-    @PostMapping("/timer/{date}")
+    @PostMapping("/time/{date}")
     public ResponseEntity<TotalTime> addOffset(@PathVariable String date, @RequestBody TimeOffSetRequest timeOffSetRequest) {
         TotalTime totalTime = timerService.addOffset(LocalDate.parse(date), timeOffSetRequest.getTimeOffSet());
         return ResponseEntity.status(HttpStatus.OK).body(totalTime);
     }
 
-    @GetMapping("/timer/{date}")
+    @GetMapping("/time/{date}")
     public ResponseEntity<TotalTime> getTotal(@PathVariable String date) {
         TotalTime totalTime = timerService.getTotalTime(LocalDate.parse(date));
         return ResponseEntity.status(HttpStatus.OK).body(totalTime);
