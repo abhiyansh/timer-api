@@ -21,8 +21,8 @@ public class TimerController {
     }
 
     @PostMapping("/time")
-    public ResponseEntity<List<TotalTime>> addInterval(@RequestBody TimeIntervalRequest timeIntervalRequest) {
-        List<TotalTime> totalTime = timerService.addInterval(timeIntervalRequest.getStartTime(), timeIntervalRequest.getEndTime());
+    public ResponseEntity<List<TotalTime>> addInterval(@RequestBody TimeInterval timeInterval) {
+        List<TotalTime> totalTime = timerService.addInterval(timeInterval.getStartTime(), timeInterval.getEndTime());
         return ResponseEntity.status(HttpStatus.OK).body(totalTime);
     }
 

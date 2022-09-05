@@ -1,9 +1,12 @@
 package com.example.Timer.controller;
 
+import com.example.Timer.exceptions.InvalidTimeIntervalException;
 import com.example.Timer.repository.TotalTime;
 import com.example.Timer.service.TimerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,7 +29,7 @@ public class TimerControllerTest {
         TimerController timerController = new TimerController(timerService);
         LocalDateTime startTime = LocalDateTime.of(2022, 8, 27, 17, 9, 38);
         LocalDateTime endTime = LocalDateTime.of(2022, 8, 30, 20, 2, 29);
-        TimeIntervalRequest timeIntervalRequest = new TimeIntervalRequest(startTime, endTime);
+        TimeInterval timeInterval = new TimeInterval(startTime, endTime);
         List<TotalTime> expectedUpdatedTotalTime = List.of(
                 new TotalTime(LocalDate.of(2022, 8, 27), 24_756L),
                 new TotalTime(LocalDate.of(2022, 8, 28), 86_400L),
@@ -35,7 +38,7 @@ public class TimerControllerTest {
         );
         when(timerService.addInterval(startTime, endTime)).thenReturn(expectedUpdatedTotalTime);
 
-        List<TotalTime> actualUpdatedTotalTime = timerController.addInterval(timeIntervalRequest).getBody();
+        List<TotalTime> actualUpdatedTotalTime = timerController.addInterval(timeInterval).getBody();
 
         assertEquals(expectedUpdatedTotalTime, actualUpdatedTotalTime);
     }
