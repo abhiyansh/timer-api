@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cd /Users/abhiyansh.arya/Projects/timer-java/build/libs/
+java -jar Timer-0.0.1-SNAPSHOT.jar
