@@ -1,13 +1,14 @@
 package com.example.Timer.service;
 
 import com.example.Timer.exceptions.InvalidTimeIntervalException;
-import com.example.Timer.repository.TotalTime;
-import com.example.Timer.repository.TotalTimeRepository;
+import com.example.Timer.exceptions.TimeIntervalOverlapException;
+import com.example.Timer.repository.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,9 +19,11 @@ import static org.mockito.Mockito.*;
 public class TimerServiceTest {
 
     private TotalTimeRepository totalTimeRepository;
+    private TimeIntervalRepository timeIntervalRepository;
 
     @BeforeEach
     void setUp() {
+        timeIntervalRepository = mock(TimeIntervalRepository.class);
         totalTimeRepository = mock(TotalTimeRepository.class);
         when(totalTimeRepository.findById(LocalDate.of(2022, 8, 27)))
                 .thenReturn(Optional.of(new TotalTime(LocalDate.of(2022, 8, 27), 134L)));
@@ -34,7 +37,7 @@ public class TimerServiceTest {
 
     @Test
     void shouldUpdateTotalTimeCorrespondingToEachDateWhenStartAndEndTimeAreGiven() {
-        TimerService timerService = new TimerService(totalTimeRepository);
+        TimerService timerService = new TimerService(totalTimeRepository, timeIntervalRepository);
         LocalDateTime startTime = LocalDateTime.of(2022, 8, 27, 17, 9, 38);
         LocalDateTime endTime = LocalDateTime.of(2022, 8, 30, 20, 2, 29);
         List<TotalTime> expectedTotalTime = List.of(
@@ -43,16 +46,39 @@ public class TimerServiceTest {
                 new TotalTime(LocalDate.of(2022, 8, 29), 86_400L),
                 new TotalTime(LocalDate.of(2022, 8, 30), 72_149L)
         );
+        List<TimeInterval> expectedTimeIntervals = List.of(
+                new TimeInterval(new TimeIntervalKey(LocalDate.of(2022, 8, 27),
+                        LocalTime.of(17, 9, 38)), LocalTime.of(23, 59, 59)),
+                new TimeInterval(new TimeIntervalKey(LocalDate.of(2022, 8, 28),
+                        LocalTime.of(0, 0, 0)), LocalTime.of(23, 59, 59)),
+                new TimeInterval(new TimeIntervalKey(LocalDate.of(2022, 8, 29),
+                        LocalTime.of(0, 0, 0)), LocalTime.of(23, 59, 59)),
+                new TimeInterval(new TimeIntervalKey(LocalDate.of(2022, 8, 30),
+                        LocalTime.of(0, 0, 0)), LocalTime.of(20, 2, 29))
+        );
 
         List<TotalTime> actualTotalTime = timerService.addInterval(startTime, endTime);
 
         verify(totalTimeRepository).saveAll(expectedTotalTime);
+        verify(timeIntervalRepository).saveAll(expectedTimeIntervals);
         assertEquals(expectedTotalTime, actualTotalTime);
     }
 
     @Test
+    void shouldThrowTimeIntervalOverlapExceptionWhenCurrentIntervalOverlapsWithExistingIntervals() {
+        when(timeIntervalRepository.findTopByOrderByEndTimeDesc())
+                .thenReturn(new TimeInterval(new TimeIntervalKey(LocalDate.of(2022, 8, 27),
+                        LocalTime.of(17, 9, 38)), LocalTime.of(21, 4, 20)));
+        TimerService timerService = new TimerService(totalTimeRepository, timeIntervalRepository);
+        LocalDateTime startTime = LocalDateTime.of(2022, 8, 27, 20, 9, 38);
+        LocalDateTime endTime = LocalDateTime.of(2022, 8, 30, 20, 2, 29);
+
+        assertThrows(TimeIntervalOverlapException.class, () -> timerService.addInterval(startTime, endTime));
+    }
+
+    @Test
     void shouldThrowInvalidTimeIntervalExceptionWhenStartTimeIsEqualToEndTime() {
-        TimerService timerService = new TimerService(totalTimeRepository);
+        TimerService timerService = new TimerService(totalTimeRepository, timeIntervalRepository);
         LocalDateTime startTime = LocalDateTime.of(2022, 8, 30, 20, 2, 29);
         LocalDateTime endTime = LocalDateTime.of(2022, 8, 30, 20, 2, 29);
 
@@ -61,7 +87,7 @@ public class TimerServiceTest {
 
     @Test
     void shouldThrowInvalidTimeIntervalExceptionWhenStartTimeIsAfterEndTime() {
-        TimerService timerService = new TimerService(totalTimeRepository);
+        TimerService timerService = new TimerService(totalTimeRepository, timeIntervalRepository);
         LocalDateTime startTime = LocalDateTime.of(2022, 8, 30, 21, 2, 29);
         LocalDateTime endTime = LocalDateTime.of(2022, 8, 30, 20, 2, 29);
 
@@ -70,7 +96,7 @@ public class TimerServiceTest {
 
     @Test
     void shouldAddTimeOffsetToAGivenDate() {
-        TimerService timerService = new TimerService(totalTimeRepository);
+        TimerService timerService = new TimerService(totalTimeRepository, timeIntervalRepository);
         LocalDate date = LocalDate.of(2022, 8, 27);
         long offsetInMinutes = 5L;
         TotalTime expectedTotalTime = new TotalTime(LocalDate.of(2022, 8, 27), 434L);
@@ -83,7 +109,7 @@ public class TimerServiceTest {
 
     @Test
     void shouldReturnTotalTimeForADayIfItExists() {
-        TimerService timerService = new TimerService(totalTimeRepository);
+        TimerService timerService = new TimerService(totalTimeRepository, timeIntervalRepository);
         LocalDate date = LocalDate.of(2022, 8, 27);
         TotalTime expectedTotalTime = new TotalTime(date, 134L);
 
@@ -94,7 +120,7 @@ public class TimerServiceTest {
 
     @Test
     void shouldReturnTotalTimeForADayAsZeroIfItDoesNotExist() {
-        TimerService timerService = new TimerService(totalTimeRepository);
+        TimerService timerService = new TimerService(totalTimeRepository, timeIntervalRepository);
         LocalDate date = LocalDate.of(2022, 8, 28);
         TotalTime expectedTotalTime = new TotalTime(date, 0L);
 
