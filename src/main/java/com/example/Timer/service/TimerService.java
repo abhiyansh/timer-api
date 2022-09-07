@@ -73,4 +73,8 @@ public class TimerService {
         return this.totalTimeRepository.findById(date)
                 .orElse(new TotalTime(date, 0L));
     }
+
+    public List<TimeInterval> getTimeIntervals(LocalDate date) {
+        return this.timeIntervalRepository.findByDate(date);
+    }
 }
