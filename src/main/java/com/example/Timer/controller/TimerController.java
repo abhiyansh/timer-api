@@ -23,7 +23,7 @@ public class TimerController {
 
     @PostMapping("/time-intervals")
     public ResponseEntity<List<TotalTime>> addTimeInterval(@RequestBody DateTimeInterval dateTimeInterval) {
-        List<TotalTime> totalTime = timerService.addInterval(dateTimeInterval.getStart(), dateTimeInterval.getEnd());
+        List<TotalTime> totalTime = timerService.addTimeInterval(dateTimeInterval.getStart(), dateTimeInterval.getEnd());
         return ResponseEntity.status(HttpStatus.OK).body(totalTime);
     }
 
@@ -35,7 +35,7 @@ public class TimerController {
 
     @PostMapping("/total-time/{date}")
     public ResponseEntity<TotalTime> addTime(@PathVariable String date, @RequestBody TotalTime timeOffSet) {
-        TotalTime totalTime = timerService.addOffset(LocalDate.parse(date), timeOffSet.getTime());
+        TotalTime totalTime = timerService.addTime(LocalDate.parse(date), timeOffSet.getTime());
         return ResponseEntity.status(HttpStatus.OK).body(totalTime);
     }
 

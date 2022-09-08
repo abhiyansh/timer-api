@@ -24,7 +24,7 @@ public class TimerService {
         this.timeIntervalRepository = timeIntervalRepository;
     }
 
-    public List<TotalTime> addInterval(LocalDateTime startTime, LocalDateTime endTime) {
+    public List<TotalTime> addTimeInterval(LocalDateTime startTime, LocalDateTime endTime) {
         if (!startTime.isBefore(endTime))
             throw new InvalidTimeIntervalException();
 
@@ -62,7 +62,7 @@ public class TimerService {
         return updatedTotalTime;
     }
 
-    public TotalTime addOffset(LocalDate date, long timeOffSet) {
+    public TotalTime addTime(LocalDate date, long timeOffSet) {
         TotalTime totalTime = this.totalTimeRepository.findById(date)
                 .orElse(new TotalTime(date, 0L));
         totalTime.setTime(totalTime.getTime() + timeOffSet);

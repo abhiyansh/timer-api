@@ -60,7 +60,7 @@ public class TimerServiceTest {
                         LocalTime.of(0, 0, 0)), LocalTime.of(20, 2, 29))
         );
 
-        List<TotalTime> actualTotalTime = timerService.addInterval(startTime, endTime);
+        List<TotalTime> actualTotalTime = timerService.addTimeInterval(startTime, endTime);
 
         verify(totalTimeRepository).saveAll(expectedTotalTime);
         verify(timeIntervalRepository).saveAll(expectedTimeIntervals);
@@ -68,7 +68,7 @@ public class TimerServiceTest {
     }
 
     @Test
-    void shouldThrowTimeIntervalOverlapExceptionWhenCurrentIntervalOverlapsWithExistingIntervals() {
+    void shouldThrowTimeIntervalOverlapExceptionWhenCurrentIntervalOverlapsWithExistingInterval() {
         when(timeIntervalRepository.findTopByOrderByEndTimeDesc())
                 .thenReturn(new TimeInterval(new TimeIntervalKey(LocalDate.of(2022, 8, 27),
                         LocalTime.of(17, 9, 38)), LocalTime.of(21, 4, 20)));
@@ -76,7 +76,7 @@ public class TimerServiceTest {
         LocalDateTime startTime = LocalDateTime.of(2022, 8, 27, 20, 9, 38);
         LocalDateTime endTime = LocalDateTime.of(2022, 8, 30, 20, 2, 29);
 
-        assertThrows(TimeIntervalOverlapException.class, () -> timerService.addInterval(startTime, endTime));
+        assertThrows(TimeIntervalOverlapException.class, () -> timerService.addTimeInterval(startTime, endTime));
     }
 
     @Test
@@ -85,7 +85,7 @@ public class TimerServiceTest {
         LocalDateTime startTime = LocalDateTime.of(2022, 8, 30, 20, 2, 29);
         LocalDateTime endTime = LocalDateTime.of(2022, 8, 30, 20, 2, 29);
 
-        assertThrows(InvalidTimeIntervalException.class, () -> timerService.addInterval(startTime, endTime));
+        assertThrows(InvalidTimeIntervalException.class, () -> timerService.addTimeInterval(startTime, endTime));
     }
 
     @Test
@@ -94,7 +94,7 @@ public class TimerServiceTest {
         LocalDateTime startTime = LocalDateTime.of(2022, 8, 30, 21, 2, 29);
         LocalDateTime endTime = LocalDateTime.of(2022, 8, 30, 20, 2, 29);
 
-        assertThrows(InvalidTimeIntervalException.class, () -> timerService.addInterval(startTime, endTime));
+        assertThrows(InvalidTimeIntervalException.class, () -> timerService.addTimeInterval(startTime, endTime));
     }
 
     @Test
@@ -104,7 +104,7 @@ public class TimerServiceTest {
         long timeOffSet = 300L;
         TotalTime expectedTotalTime = new TotalTime(LocalDate.of(2022, 8, 27), 434L);
 
-        TotalTime actualTotalTime = timerService.addOffset(date, timeOffSet);
+        TotalTime actualTotalTime = timerService.addTime(date, timeOffSet);
 
         verify(totalTimeRepository).save(expectedTotalTime);
         assertEquals(expectedTotalTime, actualTotalTime);
@@ -133,7 +133,7 @@ public class TimerServiceTest {
     }
 
     @Test
-    void shouldReturnAllTimeIntervalsCorrespondingToADate() {
+    void shouldReturnTimeIntervalsCorrespondingToADate() {
         TimerService timerService = new TimerService(totalTimeRepository, timeIntervalRepository);
         LocalDate date = LocalDate.of(2022, 8, 27);
         when(timeIntervalRepository.findByTimeIntervalKeyDate(LocalDate.of(2022, 8, 27)))

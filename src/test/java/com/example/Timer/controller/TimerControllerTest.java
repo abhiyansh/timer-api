@@ -36,7 +36,7 @@ public class TimerControllerTest {
                 new TotalTime(LocalDate.of(2022, 8, 29), 86_400L),
                 new TotalTime(LocalDate.of(2022, 8, 30), 72_149L)
         );
-        when(timerService.addInterval(startTime, endTime)).thenReturn(expectedUpdatedTotalTime);
+        when(timerService.addTimeInterval(startTime, endTime)).thenReturn(expectedUpdatedTotalTime);
 
         List<TotalTime> actualUpdatedTotalTime = timerController.addTimeInterval(dateTimeInterval).getBody();
 
@@ -50,7 +50,7 @@ public class TimerControllerTest {
         long timeOffSet = 5L;
         TotalTime timeOffSetRequest = new TotalTime(LocalDate.parse(date), timeOffSet);
         TotalTime expectedTotal = new TotalTime(LocalDate.parse(date), 300L);
-        when(timerService.addOffset(LocalDate.of(2022, 8, 27), timeOffSet)).thenReturn(expectedTotal);
+        when(timerService.addTime(LocalDate.of(2022, 8, 27), timeOffSet)).thenReturn(expectedTotal);
 
         TotalTime actualTotal = timerController.addTime(date, timeOffSetRequest).getBody();
 
