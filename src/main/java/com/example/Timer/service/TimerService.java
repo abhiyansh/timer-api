@@ -62,10 +62,10 @@ public class TimerService {
         return updatedTotalTime;
     }
 
-    public TotalTime addOffset(LocalDate date, long offsetInMinutes) {
+    public TotalTime addOffset(LocalDate date, long timeOffSet) {
         TotalTime totalTime = this.totalTimeRepository.findById(date)
                 .orElse(new TotalTime(date, 0L));
-        totalTime.setTime(totalTime.getTime() + (offsetInMinutes * 60));
+        totalTime.setTime(totalTime.getTime() + timeOffSet);
         this.totalTimeRepository.save(totalTime);
         return totalTime;
     }

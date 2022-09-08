@@ -1,5 +1,7 @@
 package com.example.Timer.repository;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.sun.istack.NotNull;
 
 import javax.persistence.Column;
@@ -13,6 +15,7 @@ import java.util.Objects;
 @Table(name = "total_time")
 public class TotalTime {
     @Id
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate date;
 
     @Column
