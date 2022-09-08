@@ -1,10 +1,7 @@
 package com.example.Timer.controller;
 
 import com.example.Timer.TimerApplication;
-import com.example.Timer.repository.TimeInterval;
-import com.example.Timer.repository.TimeIntervalKey;
-import com.example.Timer.repository.TimeIntervalRepository;
-import com.example.Timer.repository.TotalTimeRepository;
+import com.example.Timer.repository.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -87,4 +85,34 @@ public class TimerControllerIntegrationTest {
                         .content(timeIntervalRequest))
                 .andExpect(status().isConflict());
     }
+
+    @Test
+    void shouldAddTimeOffSetToADaySuccessfully() throws Exception {
+        String date = "2022-08-27";
+        long initTime = 100L;
+        long timeOffSet = 24_622L;
+        long finalTime = 24_722L;
+        totalTimeRepository.save(new TotalTime(LocalDate.parse(date), initTime));
+        String request = String.format("{\"date\":\"%S\",\"time\":%d}", date, timeOffSet);
+        String expectedResponse = String.format("{\"date\":\"%S\",\"time\":%d}", date, finalTime);
+
+        mockMvc.perform(post("/total-time/" + date)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(request))
+                .andExpect(status().isOk())
+                .andExpect(content().json(expectedResponse));
+    }
+
+    @Test
+    void shouldReturnTotalTimeForADaySuccessfully() throws Exception {
+        String date = "2022-08-27";
+        long time = 100L;
+        totalTimeRepository.save(new TotalTime(LocalDate.parse(date), time));
+        String expectedResponse = String.format("{\"date\":\"%S\",\"time\":%d}", date, time);
+
+        mockMvc.perform(get("/total-time/" + date))
+                .andExpect(status().isOk())
+                .andExpect(content().json(expectedResponse));
+    }
+
 }
