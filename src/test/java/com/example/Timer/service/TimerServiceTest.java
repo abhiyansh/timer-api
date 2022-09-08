@@ -37,6 +37,9 @@ public class TimerServiceTest {
 
     @Test
     void shouldUpdateTotalTimeCorrespondingToEachDateWhenStartAndEndTimeAreGiven() {
+        when(timeIntervalRepository.findTopByOrderByEndTimeDesc())
+                .thenReturn(new TimeInterval(new TimeIntervalKey(LocalDate.of(2022, 8, 27),
+                        LocalTime.of(10, 0, 0)), LocalTime.of(10, 2, 14)));
         TimerService timerService = new TimerService(totalTimeRepository, timeIntervalRepository);
         LocalDateTime startTime = LocalDateTime.of(2022, 8, 27, 17, 9, 38);
         LocalDateTime endTime = LocalDateTime.of(2022, 8, 30, 20, 2, 29);
@@ -98,10 +101,10 @@ public class TimerServiceTest {
     void shouldAddTimeOffsetToAGivenDate() {
         TimerService timerService = new TimerService(totalTimeRepository, timeIntervalRepository);
         LocalDate date = LocalDate.of(2022, 8, 27);
-        long offsetInMinutes = 5L;
+        long timeOffSet = 300L;
         TotalTime expectedTotalTime = new TotalTime(LocalDate.of(2022, 8, 27), 434L);
 
-        TotalTime actualTotalTime = timerService.addOffset(date, offsetInMinutes);
+        TotalTime actualTotalTime = timerService.addOffset(date, timeOffSet);
 
         verify(totalTimeRepository).save(expectedTotalTime);
         assertEquals(expectedTotalTime, actualTotalTime);
