@@ -38,8 +38,8 @@ public class TimerServiceTest {
     @Test
     void shouldUpdateTotalTimeCorrespondingToEachDateWhenStartAndEndTimeAreGiven() {
         when(timeIntervalRepository.findTopByOrderByEndTimeDesc())
-                .thenReturn(new TimeInterval(new TimeIntervalKey(LocalDate.of(2022, 8, 27),
-                        LocalTime.of(10, 0, 0)), LocalTime.of(10, 2, 14)));
+                .thenReturn((Optional.of(new TimeInterval(new TimeIntervalKey(LocalDate.of(2022, 8, 27),
+                        LocalTime.of(10, 0, 0)), LocalTime.of(10, 2, 14)))));
         TimerService timerService = new TimerService(totalTimeRepository, timeIntervalRepository);
         LocalDateTime startTime = LocalDateTime.of(2022, 8, 27, 17, 9, 38);
         LocalDateTime endTime = LocalDateTime.of(2022, 8, 30, 20, 2, 29);
@@ -70,8 +70,8 @@ public class TimerServiceTest {
     @Test
     void shouldThrowTimeIntervalOverlapExceptionWhenCurrentIntervalOverlapsWithExistingInterval() {
         when(timeIntervalRepository.findTopByOrderByEndTimeDesc())
-                .thenReturn(new TimeInterval(new TimeIntervalKey(LocalDate.of(2022, 8, 27),
-                        LocalTime.of(17, 9, 38)), LocalTime.of(21, 4, 20)));
+                .thenReturn(Optional.of(new TimeInterval(new TimeIntervalKey(LocalDate.of(2022, 8, 27),
+                        LocalTime.of(17, 9, 38)), LocalTime.of(21, 4, 20))));
         TimerService timerService = new TimerService(totalTimeRepository, timeIntervalRepository);
         LocalDateTime startTime = LocalDateTime.of(2022, 8, 27, 20, 9, 38);
         LocalDateTime endTime = LocalDateTime.of(2022, 8, 30, 20, 2, 29);

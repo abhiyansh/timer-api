@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TimerService {
@@ -28,11 +29,14 @@ public class TimerService {
         if (!startTime.isBefore(endTime))
             throw new InvalidTimeIntervalException();
 
-        TimeInterval lastInterval = this.timeIntervalRepository.findTopByOrderByEndTimeDesc();
-        LocalDateTime lastIntervalEndDateTime = LocalDateTime.of(lastInterval.getTimeIntervalKey().getDate(), lastInterval.getEndTime());
+        Optional<TimeInterval> lastInterval = this.timeIntervalRepository.findTopByOrderByEndTimeDesc();
 
-        if (!startTime.isAfter(lastIntervalEndDateTime))
-            throw new TimeIntervalOverlapException();
+        if (lastInterval.isPresent()) {
+            TimeInterval lastIntervalValue = lastInterval.get();
+            LocalDateTime lastIntervalEndDateTime = LocalDateTime.of(lastIntervalValue.getTimeIntervalKey().getDate(), lastIntervalValue.getEndTime());
+            if (!startTime.isAfter(lastIntervalEndDateTime))
+                throw new TimeIntervalOverlapException();
+        }
 
         ArrayList<TotalTime> updatedTotalTime = new ArrayList<>();
         ArrayList<TimeInterval> timeIntervals = new ArrayList<>();
