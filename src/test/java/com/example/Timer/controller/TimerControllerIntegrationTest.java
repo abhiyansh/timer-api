@@ -115,4 +115,19 @@ public class TimerControllerIntegrationTest {
                 .andExpect(content().json(expectedResponse));
     }
 
+    @Test
+    void shouldReturnTimeIntervalsCorrespondingToADateSuccessfully() throws Exception {
+        String date = "2022-08-27";
+        timeIntervalRepository.save(new TimeInterval(new TimeIntervalKey(LocalDate.parse(date),
+                LocalTime.of(17, 9, 38)), LocalTime.of(21, 4, 20)));
+        timeIntervalRepository.save(new TimeInterval(new TimeIntervalKey(LocalDate.parse(date),
+                LocalTime.of(22, 9, 38)), LocalTime.of(23, 4, 20)));
+        String expectedResponse = "[{\"start\":\"17:09:38\",\"end\":\"21:04:20\"}," +
+                "{\"start\":\"22:09:38\",\"end\":\"23:04:20\"}]";
+
+        mockMvc.perform(get("/time-intervals/" + date))
+                .andExpect(status().isOk())
+                .andExpect(content().json(expectedResponse));
+    }
+
 }
