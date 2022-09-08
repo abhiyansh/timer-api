@@ -8,5 +8,5 @@ import java.util.List;
 public interface TimeIntervalRepository extends JpaRepository<TimeInterval, TimeIntervalKey> {
     TimeInterval findTopByOrderByEndTimeDesc();
 
-    List<TimeInterval> findByDate(LocalDate date);
+    List<TimeInterval> findByTimeIntervalKeyDate(LocalDate date);
 }

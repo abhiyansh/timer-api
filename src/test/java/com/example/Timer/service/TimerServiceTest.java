@@ -133,7 +133,7 @@ public class TimerServiceTest {
     void shouldReturnAllTimeIntervalsCorrespondingToADate() {
         TimerService timerService = new TimerService(totalTimeRepository, timeIntervalRepository);
         LocalDate date = LocalDate.of(2022, 8, 27);
-        when(timeIntervalRepository.findByDate(LocalDate.of(2022, 8, 27)))
+        when(timeIntervalRepository.findByTimeIntervalKeyDate(LocalDate.of(2022, 8, 27)))
                 .thenReturn(List.of(
                         new TimeInterval(new TimeIntervalKey(LocalDate.of(2022, 8, 27),
                                 LocalTime.of(17, 9, 38)), LocalTime.of(17, 19, 59)),

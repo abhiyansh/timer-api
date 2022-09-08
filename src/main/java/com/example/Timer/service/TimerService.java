@@ -14,10 +14,11 @@ import java.util.List;
 
 @Service
 public class TimerService {
+    @Autowired
     private final TotalTimeRepository totalTimeRepository;
+    @Autowired
     private final TimeIntervalRepository timeIntervalRepository;
 
-    @Autowired
     public TimerService(TotalTimeRepository totalTimeRepository, TimeIntervalRepository timeIntervalRepository) {
         this.totalTimeRepository = totalTimeRepository;
         this.timeIntervalRepository = timeIntervalRepository;
@@ -75,6 +76,6 @@ public class TimerService {
     }
 
     public List<TimeInterval> getTimeIntervals(LocalDate date) {
-        return this.timeIntervalRepository.findByDate(date);
+        return this.timeIntervalRepository.findByTimeIntervalKeyDate(date);
     }
 }
