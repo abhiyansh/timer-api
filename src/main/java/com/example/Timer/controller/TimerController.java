@@ -21,21 +21,9 @@ public class TimerController {
         this.timerService = timerService;
     }
 
-    @PostMapping("/time")
+    @PostMapping("/time-intervals")
     public ResponseEntity<List<TotalTime>> addInterval(@RequestBody DateTimeInterval dateTimeInterval) {
         List<TotalTime> totalTime = timerService.addInterval(dateTimeInterval.getStart(), dateTimeInterval.getEnd());
-        return ResponseEntity.status(HttpStatus.OK).body(totalTime);
-    }
-
-    @PostMapping("/time/{date}")
-    public ResponseEntity<TotalTime> addOffset(@PathVariable String date, @RequestBody TimeOffSet timeOffSet) {
-        TotalTime totalTime = timerService.addOffset(LocalDate.parse(date), timeOffSet.getTimeOffSet());
-        return ResponseEntity.status(HttpStatus.OK).body(totalTime);
-    }
-
-    @GetMapping("/time/{date}")
-    public ResponseEntity<TotalTime> getTotal(@PathVariable String date) {
-        TotalTime totalTime = timerService.getTotalTime(LocalDate.parse(date));
         return ResponseEntity.status(HttpStatus.OK).body(totalTime);
     }
 
@@ -43,5 +31,17 @@ public class TimerController {
     public ResponseEntity<List<TimeInterval>> getTimeIntervals(@PathVariable String date) {
         List<TimeInterval> timeIntervals = timerService.getTimeIntervals(LocalDate.parse(date));
         return ResponseEntity.status(HttpStatus.OK).body(timeIntervals);
+    }
+
+    @PostMapping("/total-time/{date}")
+    public ResponseEntity<TotalTime> addOffset(@PathVariable String date, @RequestBody TimeOffSet timeOffSet) {
+        TotalTime totalTime = timerService.addOffset(LocalDate.parse(date), timeOffSet.getTimeOffSet());
+        return ResponseEntity.status(HttpStatus.OK).body(totalTime);
+    }
+
+    @GetMapping("/total-time/{date}")
+    public ResponseEntity<TotalTime> getTotal(@PathVariable String date) {
+        TotalTime totalTime = timerService.getTotalTime(LocalDate.parse(date));
+        return ResponseEntity.status(HttpStatus.OK).body(totalTime);
     }
 }
