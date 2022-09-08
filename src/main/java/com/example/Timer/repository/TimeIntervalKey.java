@@ -20,6 +20,9 @@ public class TimeIntervalKey implements Serializable {
         this.startTime = startTime;
     }
 
+    public TimeIntervalKey() {
+    }
+
     public LocalDate getDate() {
         return date;
     }

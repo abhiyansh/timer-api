@@ -1,11 +1,9 @@
 package com.example.Timer.controller;
 
-import com.example.Timer.repository.TimeIntervalKey;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 public class DateTimeInterval {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -18,7 +16,7 @@ public class DateTimeInterval {
         this.end = end;
     }
 
-    public DateTimeInterval(TimeIntervalKey timeIntervalKey, LocalTime of) {
+    public DateTimeInterval() {
     }
 
     public LocalDateTime getStart() {

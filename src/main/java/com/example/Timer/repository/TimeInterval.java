@@ -24,6 +24,9 @@ public class TimeInterval {
         this.endTime = endTime;
     }
 
+    public TimeInterval() {
+    }
+
     public TimeIntervalKey getTimeIntervalKey() {
         return timeIntervalKey;
     }
