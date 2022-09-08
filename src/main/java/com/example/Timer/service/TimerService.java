@@ -1,5 +1,6 @@
 package com.example.Timer.service;
 
+import com.example.Timer.controller.TimeIntervalDTO;
 import com.example.Timer.exceptions.InvalidTimeIntervalException;
 import com.example.Timer.exceptions.TimeIntervalOverlapException;
 import com.example.Timer.repository.*;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TimerService {
@@ -79,7 +81,7 @@ public class TimerService {
                 .orElse(new TotalTime(date, 0L));
     }
 
-    public List<TimeInterval> getTimeIntervals(LocalDate date) {
-        return this.timeIntervalRepository.findByTimeIntervalKeyDate(date);
+    public List<TimeIntervalDTO> getTimeIntervals(LocalDate date) {
+        return this.timeIntervalRepository.findByTimeIntervalKeyDate(date).stream().map(TimeIntervalDTO::from).collect(Collectors.toList());
     }
 }

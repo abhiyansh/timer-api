@@ -1,6 +1,5 @@
 package com.example.Timer.controller;
 
-import com.example.Timer.repository.TimeInterval;
 import com.example.Timer.repository.TotalTime;
 import com.example.Timer.service.TimerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +21,14 @@ public class TimerController {
     }
 
     @PostMapping("/time-intervals")
-    public ResponseEntity<List<TotalTime>> addTimeInterval(@RequestBody DateTimeInterval dateTimeInterval) {
+    public ResponseEntity<List<TotalTime>> addTimeInterval(@RequestBody DateTimeIntervalDTO dateTimeInterval) {
         List<TotalTime> totalTime = timerService.addTimeInterval(dateTimeInterval.getStart(), dateTimeInterval.getEnd());
         return ResponseEntity.status(HttpStatus.OK).body(totalTime);
     }
 
     @GetMapping("/time-intervals/{date}")
-    public ResponseEntity<List<TimeInterval>> getTimeIntervals(@PathVariable String date) {
-        List<TimeInterval> timeIntervals = timerService.getTimeIntervals(LocalDate.parse(date));
+    public ResponseEntity<List<TimeIntervalDTO>> getTimeIntervals(@PathVariable String date) {
+        List<TimeIntervalDTO> timeIntervals = timerService.getTimeIntervals(LocalDate.parse(date));
         return ResponseEntity.status(HttpStatus.OK).body(timeIntervals);
     }
 

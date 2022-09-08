@@ -5,18 +5,18 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 
 import java.time.LocalDateTime;
 
-public class DateTimeInterval {
+public class DateTimeIntervalDTO {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime start;
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime end;
 
-    public DateTimeInterval(LocalDateTime start, LocalDateTime end) {
+    public DateTimeIntervalDTO(LocalDateTime start, LocalDateTime end) {
         this.start = start;
         this.end = end;
     }
 
-    public DateTimeInterval() {
+    public DateTimeIntervalDTO() {
     }
 
     public LocalDateTime getStart() {

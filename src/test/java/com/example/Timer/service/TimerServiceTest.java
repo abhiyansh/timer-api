@@ -1,5 +1,6 @@
 package com.example.Timer.service;
 
+import com.example.Timer.controller.TimeIntervalDTO;
 import com.example.Timer.exceptions.InvalidTimeIntervalException;
 import com.example.Timer.exceptions.TimeIntervalOverlapException;
 import com.example.Timer.repository.*;
@@ -145,16 +146,13 @@ public class TimerServiceTest {
                         new TimeInterval(new TimeIntervalKey(LocalDate.of(2022, 8, 27),
                                 LocalTime.of(23, 9, 38)), LocalTime.of(23, 50, 59))
                 ));
-        List<TimeInterval> expectedTimeIntervals = List.of(
-                new TimeInterval(new TimeIntervalKey(LocalDate.of(2022, 8, 27),
-                        LocalTime.of(17, 9, 38)), LocalTime.of(17, 19, 59)),
-                new TimeInterval(new TimeIntervalKey(LocalDate.of(2022, 8, 27),
-                        LocalTime.of(18, 0, 0)), LocalTime.of(19, 30, 0)),
-                new TimeInterval(new TimeIntervalKey(LocalDate.of(2022, 8, 27),
-                        LocalTime.of(23, 9, 38)), LocalTime.of(23, 50, 59))
+        List<TimeIntervalDTO> expectedTimeIntervals = List.of(
+                new TimeIntervalDTO(LocalTime.of(17, 9, 38), LocalTime.of(17, 19, 59)),
+                new TimeIntervalDTO(LocalTime.of(18, 0, 0), LocalTime.of(19, 30, 0)),
+                new TimeIntervalDTO(LocalTime.of(23, 9, 38), LocalTime.of(23, 50, 59))
         );
 
-        List<TimeInterval> actualTimeIntervals = timerService.getTimeIntervals(date);
+        List<TimeIntervalDTO> actualTimeIntervals = timerService.getTimeIntervals(date);
 
         assertEquals(expectedTimeIntervals, actualTimeIntervals);
     }
