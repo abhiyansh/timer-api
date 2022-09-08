@@ -25,7 +25,7 @@ public class TimerControllerTest {
     }
 
     @Test
-    void shouldUpdateTotalTimeWhenStartAndEndTimeAreGiven() {
+    void shouldUpdateTotalTimeWhenDateTimeIntervalIsGiven() {
         TimerController timerController = new TimerController(timerService);
         LocalDateTime startTime = LocalDateTime.of(2022, 8, 27, 17, 9, 38);
         LocalDateTime endTime = LocalDateTime.of(2022, 8, 30, 20, 2, 29);
@@ -38,13 +38,13 @@ public class TimerControllerTest {
         );
         when(timerService.addInterval(startTime, endTime)).thenReturn(expectedUpdatedTotalTime);
 
-        List<TotalTime> actualUpdatedTotalTime = timerController.addInterval(dateTimeInterval).getBody();
+        List<TotalTime> actualUpdatedTotalTime = timerController.addTimeInterval(dateTimeInterval).getBody();
 
         assertEquals(expectedUpdatedTotalTime, actualUpdatedTotalTime);
     }
 
     @Test
-    void shouldUpdateTotalTimeForADayWhenOffsetIsGiven() {
+    void shouldUpdateTotalTimeForADayWhenTimeOffsetIsGiven() {
         TimerController timerController = new TimerController(timerService);
         String date = "2022-08-27";
         long timeOffSet = 5L;
@@ -52,7 +52,7 @@ public class TimerControllerTest {
         TotalTime expectedTotal = new TotalTime(LocalDate.parse(date), 300L);
         when(timerService.addOffset(LocalDate.of(2022, 8, 27), timeOffSet)).thenReturn(expectedTotal);
 
-        TotalTime actualTotal = timerController.addOffset(date, timeOffSetRequest).getBody();
+        TotalTime actualTotal = timerController.addTime(date, timeOffSetRequest).getBody();
 
         assertEquals(expectedTotal, actualTotal);
     }
@@ -70,7 +70,7 @@ public class TimerControllerTest {
     }
 
     @Test
-    void shouldReturnAllTimeIntervalsForAGivenDate() {
+    void shouldReturnTimeIntervalsForAGivenDate() {
         TimerController timerController = new TimerController(timerService);
         String date = "2022-08-27";
         List<TimeInterval> expectedTimeIntervals = List.of(
